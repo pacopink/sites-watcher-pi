@@ -5,6 +5,7 @@ import multiprocessing.dummy as multithreading
 import urllib2
 from config import web_sites_to_watch
 import time
+import traceback
 
 class WebChecker:
     def __init__(self, interval=60, thread_pool_size=16):
@@ -40,13 +41,17 @@ class WebChecker:
             t0 = time.time()
             res = urllib2.urlopen(url, timeout=3)
             code = res.getcode()
-            content = res.read()
-            print "url:[{url}] get resp_code:[{code}]".format(code=code, url=url)
             if (code==200):
+                content = res.read()
                 if (expectation is None) or (expectation is not None and content  == expectation):
                     delay = (time.time()-t0)*1000 #the delay is measured in ms
+            print "url:[{url}] get resp_code:[{code}]".format(code=code, url=url)
         except urllib2.URLError, e:  
-            print e.reason  
-            #print len(f)  
+            print "URL:%s exception: %s"%(url,e)
+            #traceback.print_exc()
+        except Exception,e:
+            print "URL:%s exception: %s"%(url,e)
+            #traceback.print_exc()
+
         return delay
 

@@ -8,7 +8,7 @@ from beeper import Beeper
 import time
 import traceback
 
-INTERVAL=60 #do http req test interval
+INTERVAL=30 #do http req test interval
 
 def ledOn(x, blink=False):
     '''to contrl led on or blink for 1 second, x should be within [0,8]'''

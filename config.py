@@ -8,9 +8,10 @@
 #          else the response content should equals to param[1]
 
 web_sites_to_watch=[
+        ["http://www.ericsson.com", None],
         ["http://www.github.com", None],
         ["http://www.baidu.com", None],
         ["http://www.google.com", None],
         ["http://www.bing.com", None],
-        ["http://my_site/heartbeat.html","my-heart-will-go-on"],
+#        ["http://my_site/heartbeat.html","my-heart-will-go-on"],
 ]
