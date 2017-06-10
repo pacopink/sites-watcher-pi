@@ -54,6 +54,7 @@ if __name__=="__main__":
                     beeper.beep = True
                     ledOn(8, blink=True)
             SAKS.digital_display.show("8888") #show 8888 when requesting 
+            ledOn(0)
     except Exception,e:
         traceback.print_exc()
         beeper.stop = True

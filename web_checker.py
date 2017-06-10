@@ -32,6 +32,7 @@ class WebChecker:
         now_sec = time.time()
         if now_sec - self.last_check_sec>=self.interval:
             self.pool.map(self.check_in_thread, web_sites_to_watch)
+            print "do_check: %f"%(time.time()-now_sec)
             self.last_check_sec = now_sec
 
     @staticmethod
@@ -39,7 +40,7 @@ class WebChecker:
         delay = None
         try:  
             t0 = time.time()
-            res = urllib2.urlopen(url, timeout=3)
+            res = urllib2.urlopen(url, timeout=2)
             code = res.getcode()
             if (code==200):
                 content = res.read()
