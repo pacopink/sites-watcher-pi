@@ -1,4 +1,4 @@
-As SRE, you may have several web services to look after.
+As a SRE, you may have several web services to look after.
 This program uses Raspberry Pi 3 Model B + NXEZ Swiss Army Knife board
 to provide a solution to watch the availablity and delay level 
 of your web services.
@@ -6,8 +6,9 @@ of your web services.
 There is a 4-digit ditgital display, they are used to display the index
 of the URL you configured in the 'config.py' file, theoretically you can 
 watch 9999 URL, although it is not practical, but it is useful if you use 
-it to watching some tens of URLs, each URL status will be displayed on the 
-board for 1 second, when it is normal, the 8 leds will show the delay level:
+it to watch some tens of URLs, each URL status will be displayed on the 
+board for 1 second, when it is normal, the first 6 of the 8 leds will show 
+the delay level:
 1 led if <250 ms
 2 led if <500 ms
 3 led if <1000 ms
@@ -15,13 +16,15 @@ board for 1 second, when it is normal, the 8 leds will show the delay level:
 5 led if <2000 ms
 6 led if <3000 ms
 
-If the URL response is timeout or does not meet the expectation, all 8 leds will
-blink and the speaker will make a loud 'BeepBeepBeep' alarm.
+If the URL response is timeout or does not meet the expectation, YELLOW and RED 
+leds will blink and the speaker will make a loud 'BeepBeepBeep' alarm.
 
 To avoid long block when waiting for HTTP response, every request runs with a
 3 seconds timeout, and a 16-thread thread pool is leveraged, as a result,
 if the no. of threads in pool is greater than the URLs you are watching, the 
-max blocking will be at max at predictable 3 seconds.
+max blocking time will be more predictable. The digital display will be off and 
+the 2 GREEN leds will be on when HTTP request testing are on-going, it may take
+some seconds.
 
 Chang Log 2017-06-11
 ====================
