@@ -27,10 +27,11 @@ class WebChecker:
         index=web_sites_to_watch.index(x)
         self.res[index] = WebChecker.check(*x)
 
-    def do_check(self):
-        '''if reach interval, check all sites, avoid long blocking, run in thread pool'''
+    def do_check(self, cb):
+        '''if reach interval, check all sites, avoid long blocking, run in thread pool, cb is a function to call before check, for example, to set digital display off'''
         now_sec = time.time()
         if now_sec - self.last_check_sec>=self.interval:
+            cb()
             self.pool.map(self.check_in_thread, web_sites_to_watch)
             print "do_check: %f"%(time.time()-now_sec)
             self.last_check_sec = now_sec
@@ -43,9 +44,11 @@ class WebChecker:
             res = urllib2.urlopen(url, timeout=2)
             code = res.getcode()
             if (code==200):
-                content = res.read()
-                if (expectation is None) or (expectation is not None and content  == expectation):
-                    delay = (time.time()-t0)*1000 #the delay is measured in ms
+                if (expectation is not None):
+                    content = res.read()
+                    if (expectation != content):
+                        raise Exception("content not match expectation")
+                delay = (time.time()-t0)*1000 #the delay is measured in ms
             print "url:[{url}] get resp_code:[{code}]".format(code=code, url=url)
         except urllib2.URLError, e:  
             print "URL:%s exception: %s"%(url,e)

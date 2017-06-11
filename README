@@ -23,6 +23,14 @@ To avoid long block when waiting for HTTP response, every request runs with a
 if the no. of threads in pool is greater than the URLs you are watching, the 
 max blocking will be at max at predictable 3 seconds.
 
+Chang Log 2017-06-11
+====================
+When some watched service failed, you may want to set-off the beeper so that it
+won't be too noisy to interupt your toubleshooting. this version use a beep_flag
+to control this, when program starts up, beep_flag will read from dip_switch#2
+to get the value, and you can change it by changing the dip_switch#2, when dip_switch#2
+is 'ON', the beep alarm is on, vice versa.
+
 Config:
 edit config.py
 

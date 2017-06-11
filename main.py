@@ -8,7 +8,7 @@ from beeper import Beeper
 import time
 import traceback
 
-INTERVAL=30 #do http req test interval
+INTERVAL=60 #do http req test interval
 
 def ledOn(x, blink=False):
     '''to contrl led on or blink for 1 second, x should be within [0,8]'''
@@ -26,9 +26,26 @@ if __name__=="__main__":
     beeper = Beeper()
     beeper.start()
 
+    def showChecking():
+        SAKS.digital_display.off() #digital display off  
+        led.turn_on(0x0c)
+
+    #initially read dip switch#2 to the flag
+    status=SAKS.dip_switch.is_on
+    beep_flag = status[1] 
+    #callback function when dip_switch status change to turn on/off beeper
+    def dipStatus(status):
+        #user can set off dip_switch #2 to supress beeper
+        print "DIP Status:"
+        print status
+        global beep_flag
+        beep_flag = status[1] #read dip switch #2 to the flag
+    #set it to handler
+    SAKS.dip_switch_status_changed_handler=dipStatus
+
     try:
         while True:
-            web_checker.do_check()
+            web_checker.do_check(showChecking)
             res=web_checker.get_result()
             for i in xrange(0,len(res)):
                 led_index=0x01<<i
@@ -51,14 +68,16 @@ if __name__=="__main__":
                         ledOn(6)
                 else:
                     #alarm with a beep and blink all light
-                    beeper.beep = True
-                    ledOn(8, blink=True)
-            SAKS.digital_display.show("8888") #show 8888 when requesting 
-            ledOn(0)
+                    if(beep_flag):
+                        beeper.beep = True
+                    led.blink(0xf0)
     except Exception,e:
         traceback.print_exc()
-        beeper.stop = True
-        beeper.join()
     except KeyboardInterrupt: 
+        pass
+    finally:
         beeper.stop = True
         beeper.join()
+        SAKS.digital_display.off() #digital display off  
+        led.turn_on(0x00)
+

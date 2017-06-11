@@ -45,7 +45,9 @@ class Tact(object):
         else:
             self.__status = not GPIO.input(self.__pin)
 
-        GPIO.add_event_detect(pin, GPIO.BOTH, callback = self.make_event, bouncetime = 1)
+        #GPIO.add_event_detect(pin, GPIO.BOTH, callback = self.make_event, bouncetime = 1)
+        GPIO.add_event_detect(pin, GPIO.FALLING, callback = self.make_event, bouncetime = 1)
+        #GPIO.add_event_detect(pin, GPIO.RISING, callback = self.make_event, bouncetime = 1)
 
         try:
             t1 = Thread(target = self.watching)
